@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Button, FormControlLabel, Checkbox, Grid } from '@mui/material';
+import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Button, FormControlLabel, Checkbox, Grid, Card, CardContent } from '@mui/material';
 import axios from 'axios';
 import Navbar from './Navbar';
+import './StudentDashboard.css'; 
 
 function StudentDashboard() {
   const [projects, setProjects] = useState([]);
@@ -12,10 +13,11 @@ function StudentDashboard() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/projects')
       .then(response => {
+        console.log('Projects fetched:', response.data); 
         setProjects(response.data);
         if (response.data.length > 0) {
           setSelectedProject(response.data[0]);
-          setSelectedProjectId(response.data[0].id);
+          setSelectedProjectId(response.data[0]._id);
         }
       })
       .catch(error => {
@@ -26,7 +28,7 @@ function StudentDashboard() {
   const handleSelectionChange = (event) => {
     const projectId = event.target.value;
     setSelectedProjectId(projectId);
-    const project = projects.find(p => p.id === projectId);
+    const project = projects.find(p => p._id === projectId);
     setSelectedProject(project);
   };
 
@@ -48,11 +50,12 @@ function StudentDashboard() {
   return (
     <>
       <Navbar />
-      <Container maxWidth="lg" style={{ padding: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          Student Dashboard
-        </Typography>
-        <Box my={4} style={{ width: '100%' }}>
+      <Container
+        maxWidth={false}
+        className="dashboard-container"
+        style={{ backgroundImage: `url(${selectedProject ? `/images/${selectedProject.backgroundImage}` : ''})` }}
+      >
+        <Box my={4} className="project-selector-box">
           <FormControl fullWidth>
             <InputLabel id="project-select-label">Select Project</InputLabel>
             <Select
@@ -63,7 +66,7 @@ function StudentDashboard() {
               onChange={handleSelectionChange}
             >
               {projects.map((project) => (
-                <MenuItem key={project.id} value={project.id}>
+                <MenuItem key={project._id} value={project._id}>
                   {project.name}
                 </MenuItem>
               ))}
@@ -71,77 +74,83 @@ function StudentDashboard() {
           </FormControl>
         </Box>
         {selectedProject && (
-          <Grid container spacing={2} style={{ width: '100%' }}>
-            <Grid item xs={12}>
-              <Typography variant="h5" component="h2">
-                {selectedProject.name}
-              </Typography>
+          <Grid container spacing={2} className="project-details">
+            <Grid item xs={12} md={2}>
+              <Card className="prerequisite-card">
+                <CardContent>
+                  <Typography variant="h6">Prerequisite Knowledge</Typography>
+                  <ul>
+                    {selectedProject.prerequisiteKnowledge.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                {selectedProject.details}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                {selectedProject.overview}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                Reference Materials:
-              </Typography>
-              <ul>
-                {selectedProject.referenceMaterials.map((material, index) => (
-                  <li key={index}>
-                    Week {material.week}: {material.material}
-                  </li>
-                ))}
-              </ul>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                Weekly Submission Format: {selectedProject.weeklySubmissionFormat}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                Final Report Format: {selectedProject.finalReportFormat}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" paragraph>
-                Viva Voce Format: {selectedProject.vivaVoceFormat}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isAccepted}
-                    onChange={handleAcceptanceChange}
-                    name="acceptTerms"
+            <Grid item xs={12} md={8}>
+              <Card className="details-card">
+                <CardContent>
+                  <Typography variant="h5" component="h2">
+                    {selectedProject.name}
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {selectedProject.details}
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    Overview:
+                  </Typography>
+                  {selectedProject.overview && Array.isArray(selectedProject.overview) ? (
+                    selectedProject.overview.map((paragraph, index) => (
+                      <Typography key={index} variant="body1" paragraph>
+                        {paragraph}
+                      </Typography>
+                    ))
+                  ) : (
+                    <Typography variant="body1" paragraph>
+                      No overview available.
+                    </Typography>
+                  )}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isAccepted}
+                        onChange={handleAcceptanceChange}
+                        name="acceptTerms"
+                      />
+                    }
+                    label="I accept that once selected I cannot change the project in future"
                   />
-                }
-                label="I accept that once selected I cannot change the project in future"
-              />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginRight: '8px' }}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSelectAndProceed}
+                      disabled={!isAccepted}
+                    >
+                      Select and Proceed
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </Grid>
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ marginRight: '8px' }}
-              >
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSelectAndProceed}
-                disabled={!isAccepted}
-              >
-                Select and Proceed
-              </Button>
+            <Grid item xs={12} md={2}>
+              <Card className="job-opportunities-card">
+                <CardContent>
+                  <Typography variant="h6">Job Opportunities</Typography>
+                  <ul>
+                    {selectedProject.jobOpportunities.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
         )}
