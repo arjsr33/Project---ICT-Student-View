@@ -15,7 +15,7 @@ const projectSchema = new mongoose.Schema({
   finalReportFormat: String,
   vivaVoceFormat: String,
   discussionForum: [String],
-  project_url: String // Add this line
+  project_url: String 
 });
 
 const projectData = mongoose.model('project', projectSchema);
