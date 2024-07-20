@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Project = require('../model/projectData'); // Ensure the path to the project model is correct
+const Project = require('../model/projectData'); 
 
 // Fetch all projects
-router.get('/', async (req, res) => { // This route handles GET requests to /api/projects
+router.get('/', async (req, res) => { 
   try {
     const projects = await Project.find({});
     res.json(projects);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => { // This route handles GET requests to /api
 });
 
 // Fetch a single project by ID
-router.get('/:id', async (req, res) => { // This route handles GET requests to /api/projects/:id
+router.get('/:id', async (req, res) => { 
   try {
     const project = await Project.findOne({ id: req.params.id });
     if (project) {
