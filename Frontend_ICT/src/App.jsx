@@ -11,7 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<StudentDashboard />} />
         <Route path="/overview" element={<ProjectOverview />} />
-        {/* Add other routes here if needed */}
       </Routes>
     </div>
   );
