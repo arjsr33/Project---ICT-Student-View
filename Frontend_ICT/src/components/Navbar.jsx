@@ -3,10 +3,10 @@ import React from 'react'
 const Navbar = () => {
   return (
     <div>
-      <nav class="navbar navbar-expand-lg bg-primary ">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse justify-content-center" id="navbarTogglerDemo02">
-                <h1 class="text-white">  ICTAK Internship Portal  </h1>
+      <nav className="navbar navbar-expand-lg bg-primary ">
+        <div className="container-fluid">
+            <div className="collapse navbar-collapse justify-content-center" id="navbarTogglerDemo02">
+                <h1 className="text-white">  ICTAK Internship Portal  </h1>
             </div>
         </div>
       </nav>
