@@ -9,8 +9,11 @@ const multer = require('multer')
 const path = require('path')
 const projectData = require('../model/projectData')
 const studentCourseData = require('../model/studentCourseData')
-const studentWeeklySubmissionData = require('../model/studentWeeklySubmissionData')
+// const studentWeeklySubmissionData = require('../model/studentWeeklySubmissionData')
 const studentsWithProjectData = require('../model/studentsWithProjectData')
+const weeklySubmissionData = require('../model/weeklySubmissionData')
+const projectSubmissionData = require('../model/projectSubmissionData')
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -53,7 +56,7 @@ router.get('/studentswithprojects/:student',async(req,res)=>{
         console.log(`Student is ${student}` )
         const data = await studentsWithProjectData.find({sp_id:student})
         res.status(200).send(data)
-        // console.log(data)
+        console.log(data)
     } catch (error) {
         res.status(404).send(error)
     }
@@ -72,9 +75,36 @@ router.post('/uploadWeek/:student', upload.single('files'), async function (req,
             files:req.file.filename,
             comments:req.body.comments,
         }
-        var newWeek = new studentWeeklySubmissionData(weekItem)
+        var newWeek = new weeklySubmissionData(weekItem)
         await newWeek.save()
         res.status(201).send({message:'Week Added!!!'})
+    }catch(e){
+        console.log(e)
+    }
+    // console.log('req.body is-')
+    // console.log(req.body)
+    // const file = req.file
+    // if(!file){
+    //     console.log('Error in attatching file')
+    // }
+    // res.send(file)
+  })
+
+  router.post('/uploadProject/:student', upload.single('files'), async function (req, res, next) {
+    // req.file is the `weeklyFile` file
+    // req.body will hold the text fields, if there were any
+    const student = req.params.student
+    try{
+        console.log(req.body)
+        var projectItem = {
+            s_id:student,
+            links:req.body.links,
+            files:req.file.filename,
+            comments:req.body.comments,
+        }
+        var newProject = new projectSubmissionData(projectItem)
+        await newProject.save()
+        res.status(201).send({message:'Project submission Added!!!'})
     }catch(e){
         console.log(e)
     }
