@@ -15,10 +15,14 @@ app.use(express.urlencoded({extended:true}))
 const princyRoutes = require('./routes/princyRoutes')
 const salmanRoutes2 = require('./routes/salmanRoutes2')
 const fathimaRoutes = require('./routes/fathimaRoutes')
+const arjunRoutes = require('./routes/arjunRoutes')
+
 
 app.use('/princy',princyRoutes)
 app.use('/salman',salmanRoutes2)
 app.use('/fathima',fathimaRoutes)
+app.use('/arjun',arjunRoutes)
+
 
 
 app.listen(process.env.PORT,()=>{

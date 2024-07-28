@@ -3,6 +3,7 @@ import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, 
 import axios from 'axios';
 import Navbar from './Navbar';
 import './ProjectDetails.css'; 
+import { useParams } from 'react-router-dom';
 
 function ProjectDetails() {
   const [projects, setProjects] = useState([]);
@@ -10,8 +11,12 @@ function ProjectDetails() {
   const [selectedProjectId, setSelectedProjectId] = useState('');
   const [isAccepted, setIsAccepted] = useState(false);
 
+  const { id } = useParams();
+
+  console.log(`Project id is ${id}`)
+
   useEffect(() => {
-    axios.get('http://localhost:5000/api/projects')
+    axios.get(`http://localhost:5000/arjun/projects/${id}`)
       .then(response => {
         console.log('Projects fetched:', response.data); 
         setProjects(response.data);
@@ -55,7 +60,7 @@ function ProjectDetails() {
         className="dashboard-container"
         style={{ backgroundImage: `url(${selectedProject ? `/images/${selectedProject.backgroundImage}` : ''})` }}
       >
-        <Box my={4} className="project-selector-box">
+        {/* <Box my={4} className="project-selector-box">
           <FormControl fullWidth>
             <InputLabel id="project-select-label">Select Project</InputLabel>
             <Select
@@ -72,7 +77,7 @@ function ProjectDetails() {
               ))}
             </Select>
           </FormControl>
-        </Box>
+        </Box> */}
         {selectedProject && (
           <Grid container spacing={2} className="project-details">
             <Grid item xs={12} md={2}>
