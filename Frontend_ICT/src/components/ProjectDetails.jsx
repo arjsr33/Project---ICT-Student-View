@@ -12,12 +12,12 @@ function ProjectDetails() {
   const [isAccepted, setIsAccepted] = useState(false);
 
   const { id } = useParams();
-  const navigate = useNavigate(); // Initialize navigate
-  const location = useLocation(); // Initialize useLocation to access state
-  const { studentData } = location.state || {}; // Destructure studentData from state
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { studentData } = location.state || {};
 
   console.log(`Project id is ${id}`);
-  console.log('Student data passed as state:', studentData); // Log studentData
+  console.log('Student data passed as state:', studentData);
 
   useEffect(() => {
     axios.get(`http://localhost:5000/arjun/projects/${id}`)
@@ -43,31 +43,48 @@ function ProjectDetails() {
       const confirmed = window.confirm('Are you sure you want to select this project? Once selected, you cannot change it.');
       if (confirmed) {
         console.log('Proceeding with project:', selectedProject.name);
-        updateStudentProject(); // Call the function to update the student project
+        saveProjectSelection();
       }
     } else {
       alert('Please accept the terms to proceed.');
     }
   };
 
-  const updateStudentProject = () => {
-    axios.put(`http://localhost:5000/princy/updateStudentProject/${studentData.s_id}`, { p_id: selectedProjectId })
+  const saveProjectSelection = () => {
+    const projectSelection = {
+      sp_id: studentData.s_id,
+      sp_name: studentData.s_name,
+      p_id: selectedProjectId,
+      p_name: selectedProject.name,
+      start_date: new Date().toISOString() // Format date to ISO 8601
+    };
+
+    axios.post('http://localhost:5000/princy/selectProject', projectSelection)
       .then(response => {
-        console.log('Student project updated:', response.data);
-        goToProjectDashboard(); // Call the function to navigate after updating the project
+        console.log('Project selection saved:', response.data);
+        goToProjectDashboard();
       })
       .catch(error => {
-        console.error('Error updating student project:', error);
+        console.error('Error saving project selection:', error);
+        if (error.response) {
+          if (error.response.status === 400) {
+            alert(error.response.data.message);
+          } else if (error.response.status === 200) {
+            console.log('Student already has a project');
+            goToProjectDashboard();
+          }
+        }
       });
   };
 
   const goToProjectDashboard = () => {
-    navigate('/ProjectDashboard1', { state: { s_id: studentData.s_id, p_id: selectedProjectId } }); // Redirect to Project Dashboard route with s_id and p_id in state
+    navigate('/ProjectDashboard1', { state: { s_id: studentData.s_id, p_id: selectedProjectId } });
   };
 
   return (
     <>
       <Navbar />
+      <br/>
       <Container
         maxWidth={false}
         className="dashboard-container"
@@ -125,6 +142,7 @@ function ProjectDetails() {
                       variant="contained"
                       color="secondary"
                       style={{ marginRight: '8px' }}
+                      onClick={() => navigate(-1)} // Go back to previous page
                     >
                       Back
                     </Button>
@@ -134,7 +152,7 @@ function ProjectDetails() {
                       onClick={handleSelectAndProceed}
                       disabled={!isAccepted}
                     >
-                      Select and Proceed
+                      Proceed
                     </Button>
                   </div>
                 </CardContent>

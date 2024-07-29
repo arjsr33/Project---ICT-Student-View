@@ -22,6 +22,7 @@ const Login2 = () => {
         setPassword('');
         setError('');
         console.log('Login successful!!!')
+
         navigate('/StudentDashboard', { state: { s_id: email } }); // Redirect to Student Dashboard route
       } else {
         setError('Invalid credentials. Please try again.');
@@ -30,12 +31,14 @@ const Login2 = () => {
       console.log(err);
       setError('Login failed. Please try again.');
     }
+
+    
   };
 
   return(
-    
+    <div>
+    <Navbar/>
     <div className="login-container">
-      <Navbar/>
       <style jsx="true">{`
         .login-container {
           display: flex;
@@ -127,6 +130,7 @@ const Login2 = () => {
           <Link to={'/signup'}><a href="/signup" className="link">New User? Register</a></Link>
         </form>
       </div>
+    </div>
     </div>
   );
 };

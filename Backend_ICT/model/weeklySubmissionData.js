@@ -5,6 +5,8 @@ const weeklySubmissionSchema = mongoose.Schema({
     links:String,
     files:String,
     comments:String,
+    mentormarks:String,
+    mentorcomments:String,
 })
 const weeklySubmissionData = mongoose.model('weeklySubmission',weeklySubmissionSchema)
 module.exports = weeklySubmissionData

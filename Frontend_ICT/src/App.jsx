@@ -12,6 +12,7 @@ import References from './components/References'
 import StudentDashboard from './components/StudentDashboard'
 import VivaVoce from './components/VivaVoce'
 import WeeklySubmission from './components/WeeklySubmission'
+import Signup from './components/Signup'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Home />}></Route>
       <Route path='/login' element={<Login2 />}></Route>
+      <Route path='/Signup' element ={<Signup />}/>
       <Route path='/StudentDashboard' element={<StudentDashboard/>}></Route>
       <Route path='/projectDetails/:id' element={<ProjectDetails />}></Route>
       <Route path='/projectOverview/:id' element={<ProjectOverview />}></Route>
@@ -29,7 +31,7 @@ function App() {
       <Route path='/references' element={<References />}></Route>
       <Route path='/WeeklySubmission' element={<WeeklySubmission />}></Route>
       <Route path='/viva' element={<VivaVoce />}></Route>
-      <Route path='/discussion' element={<DiscussionForum />}></Route>
+      <Route path="/discussion/:batch" element={<DiscussionForum />} />
       <Route path='/FinalProjectSubmission' element={<FinalProjectSubmission/>}></Route>
 
     </Routes>

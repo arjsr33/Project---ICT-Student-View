@@ -114,8 +114,8 @@ const VivaVoce = () => {
 
       {!projectReportSubmitted ? (
         <div style={styles.submissionLink}>
-          <h3 style={styles.submissionHeader}>Submit Your Project Report</h3>
-          <button onClick={handleProjectReportSubmit} style={styles.button}>Submit Project Report</button>
+          {/* <h3 style={styles.submissionHeader}>Submit Your Project Report</h3> */}
+          {/* <button onClick={handleProjectReportSubmit} style={styles.button}>Submit Project Report</button> */}
         </div>
       ) : (
         submissionLinkVisible && (

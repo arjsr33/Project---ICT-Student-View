@@ -116,11 +116,7 @@ const DiscussionForum = () => {
           </div>
         ))}
       </div>
-      <div style={styles.marksSection}>
-        <h3>Marks and Comments</h3>
-        <p>Marks: {marks}</p>
-        <p>Comments: {comments}</p>
-      </div>
+     
     </div>
   );
 };

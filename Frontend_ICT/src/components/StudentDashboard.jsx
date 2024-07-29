@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const StudentDashboard = () => {
     // const [student,setStudent] = useState("")
@@ -65,6 +66,12 @@ const StudentDashboard = () => {
     <div>
         <Navbar/>
         <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br/>
+
+
         <h2 className="text-primary py-2 text-center"><u>The Student Dashboard</u></h2>
         <div className="row">
             <br/><br/><br/>
@@ -100,7 +107,8 @@ const StudentDashboard = () => {
                 </ol>
                 {/* ))} */}
             </div>
-            <div className="col-9">
+            
+            <div className="col-8">
                 <h3><u>Available Projects</u></h3><br/>
                 <div className="row ">
                 {projects.map((item,i)=>(

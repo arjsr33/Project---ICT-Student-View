@@ -1,17 +1,25 @@
-import React from 'react'
+import React from 'react';
+import './Navbar/Navbar.css'
+import logo from "../assets/logo.png";
+import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+
+const Appbar = () => {
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg bg-primary ">
-        <div className="container-fluid">
-            <div className="collapse navbar-collapse justify-content-center" id="navbarTogglerDemo02">
-                <h1 className="text-white">  ICTAK Internship Portal  </h1>
-            </div>
-        </div>
-      </nav>
-    </div>
+    <nav className=''>
+        <img src={logo} alt="" className='logo' />
+        <div className='center-text'>
+        ICT Academy of Kerala
+      </div>
+        <ul>
+            <Link to={'/'}><li><button className='btn'>Logout</button></li></Link>
+            
+
+            
+        </ul>
+    </nav>
+    
   )
 }
 
-export default Navbar
+export default Appbar

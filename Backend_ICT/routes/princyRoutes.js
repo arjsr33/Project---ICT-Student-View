@@ -74,8 +74,35 @@ router.get('/studentswithprojects/:student',async(req,res)=>{
     }
 })
 
+// router.post('/uploadWeek/:student', upload.single('files'), async function (req, res, next) {
+//     // req.file is the `weeklyFile` file
+//     // req.body will hold the text fields, if there were any
+//     const student = req.params.student
+//     try{
+//         console.log(req.body)
+//         var weekItem = {
+//             s_id:student,
+//             week:req.body.selectedWeek,
+//             links:req.body.links,
+//             files:req.file.filename,
+//             comments:req.body.comments,
+//         }
+//         var newWeek = new weeklySubmissionData(weekItem)
+//         await newWeek.save()
+//         res.status(201).send({message:'Week Added!!!'})
+//     }catch(e){
+//         console.log(e)
+//     }
+//     // console.log('req.body is-')
+//     // console.log(req.body)
+//     // const file = req.file
+//     // if(!file){
+//     //     console.log('Error in attatching file')
+//     // }
+//     // res.send(file)
+//   })
 router.post('/uploadWeek/:student', upload.single('files'), async function (req, res, next) {
-    // req.file is the `weeklyFile` file
+    // req.file is the weeklyFile file
     // req.body will hold the text fields, if there were any
     const student = req.params.student
     try{
@@ -86,24 +113,52 @@ router.post('/uploadWeek/:student', upload.single('files'), async function (req,
             links:req.body.links,
             files:req.file.filename,
             comments:req.body.comments,
+            mentormarks:"Yet to be graded",
+            mentorcomments:"Yet to be graded",
         }
-        var newWeek = new weeklySubmissionData(weekItem)
-        await newWeek.save()
+        // var newWeek = new weeklySubmissionData(weekItem)
+        // await newWeek.save()
+        const updatedDocument = await weeklySubmissionData.findOneAndUpdate(
+            { s_id: student, week:req.body.selectedWeek }, // Find document by _id or any other field
+            { $set: weekItem }, // Update fields
+            // { new: true, upsert: true, runValidators: true } // Return the updated document, create if not exists, and run schema validation
+            { new: true, upsert: true } // Return the updated document, create if not exists
+        );
+        console.log('Updated document:', updatedDocument);
         res.status(201).send({message:'Week Added!!!'})
     }catch(e){
         console.log(e)
     }
-    // console.log('req.body is-')
-    // console.log(req.body)
-    // const file = req.file
-    // if(!file){
-    //     console.log('Error in attatching file')
-    // }
-    // res.send(file)
   })
 
-  router.post('/uploadProject/:student', upload.single('files'), async function (req, res, next) {
-    // req.file is the `weeklyFile` file
+//   router.post('/uploadProject/:student', upload.single('files'), async function (req, res, next) {
+//     // req.file is the `weeklyFile` file
+//     // req.body will hold the text fields, if there were any
+//     const student = req.params.student
+//     try{
+//         console.log(req.body)
+//         var projectItem = {
+//             s_id:student,
+//             links:req.body.links,
+//             files:req.file.filename,
+//             comments:req.body.comments,
+//         }
+//         var newProject = new projectSubmissionData(projectItem)
+//         await newProject.save()
+//         res.status(201).send({message:'Project submission Added!!!'})
+//     }catch(e){
+//         console.log(e)
+//     }
+//     // console.log('req.body is-')
+//     // console.log(req.body)
+//     // const file = req.file
+//     // if(!file){
+//     //     console.log('Error in attatching file')
+//     // }
+//     // res.send(file)
+//   })
+router.post('/uploadProject/:student', upload.single('files'), async function (req, res, next) {
+    // req.file is the weeklyFile file
     // req.body will hold the text fields, if there were any
     const student = req.params.student
     try{
@@ -114,8 +169,15 @@ router.post('/uploadWeek/:student', upload.single('files'), async function (req,
             files:req.file.filename,
             comments:req.body.comments,
         }
-        var newProject = new projectSubmissionData(projectItem)
-        await newProject.save()
+        // var newProject = new projectSubmissionData(projectItem)
+        // await newProject.save()
+        const updatedDocument = await projectSubmissionData.findOneAndUpdate(
+            { s_id: student }, // Find document by _id or any other field
+            { $set: projectItem }, // Update fields
+            // { new: true, upsert: true, runValidators: true } // Return the updated document, create if not exists, and run schema validation
+            { new: true, upsert: true } // Return the updated document, create if not exists
+        );
+        console.log('Updated document:', updatedDocument);
         res.status(201).send({message:'Project submission Added!!!'})
     }catch(e){
         console.log(e)
@@ -145,6 +207,43 @@ router.post('/uploadWeek/:student', upload.single('files'), async function (req,
         console.log(e)
     }
   })
+  
+router.post('/selectProject', async (req, res) => {
+  try {
+    const { sp_id, sp_name, p_id, p_name, start_date } = req.body;
+    console.log('Project selection data:', req.body);
+
+    // Check if sp_id already exists
+    const existingStudent = await studentsWithProjectData.findOne({ sp_id });
+    const studentCourse = await studentCourseData.findOne({ s_id: sp_id });
+
+        if (studentCourse && studentCourse.s_exitscore <= 50) {
+            console.log('Student exit score is below 50');
+            return res.status(400).send({ message: "You can't select a project as your exit score is below 50" });
+        }
+    
+
+    if (existingStudent) {
+      console.log('Student already has a project');
+      res.status(200).send({ message: 'Student already has a project', data: existingStudent });
+    } else {
+      const newSelection = {
+        sp_id,
+        sp_name,
+        p_id,
+        p_name,
+        start_date: new Date(start_date) // Convert to ISO format
+      };
+
+      const result = await studentsWithProjectData.create(newSelection);
+
+      res.status(201).send({ message: 'Project selection saved successfully!', data: result });
+    }
+  } catch (error) {
+    console.error('Error saving project selection:', error);
+    res.status(500).send({ message: 'Error saving project selection', error });
+  }
+});
   // New PUT route to update the student's project ID
 router.put('/updateStudentProject/:s_id', async (req, res) => {
     try {
@@ -166,8 +265,9 @@ router.put('/updateStudentProject/:s_id', async (req, res) => {
       }
     } catch (error) {
       console.error('Error updating student project:', error);
-      res.status(500).send({ message: 'Error updating student project', error });
+      res.status500().send({ message: 'Error updating student project', error });
     }
   });
+
 
 module.exports = router

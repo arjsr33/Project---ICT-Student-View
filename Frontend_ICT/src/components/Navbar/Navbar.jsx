@@ -1,23 +1,26 @@
 import React from 'react';
-import './Navbar.css';
+import './Navbar.css'
 import logo from "../../assets/logo.png";
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+
+const Appbar = () => {
   return (
-    <nav >
+    <nav className=''>
         <img src={logo} alt="" className='logo' />
+        <div className='center-text'>
+        ICT Academy of Kerala
+      </div>
         <ul>
-            <li>Home</li>
-            <li>Courses</li>
-            <li>Events</li>
-            <li>About Us</li>
-            <li>Contact Us</li>
-            <Link to={'/login'}><li><button className='btn'>LOGIN</button></li></Link>
+            <Link to={'/'}><li><button className='btn'>Home</button></li></Link>
+            <Link to={'/login'}><li><button className='btn'>Login</button></li></Link>
+            
+
+            
         </ul>
     </nav>
     
   )
 }
 
-export default Navbar
+export default Appbar
