@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
     <Navbar/>
-    <div className='home container'>
+    <div className='home'>
      <div className="home-text">
         <h1>Build Your Career With ICTAK</h1>
         <p>ICT Academy of Kerala provides the best quality education to upskill the youths across the state in various sectors.Join our courses and build your future!</p>

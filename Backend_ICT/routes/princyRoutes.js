@@ -145,5 +145,29 @@ router.post('/uploadWeek/:student', upload.single('files'), async function (req,
         console.log(e)
     }
   })
+  // New PUT route to update the student's project ID
+router.put('/updateStudentProject/:s_id', async (req, res) => {
+    try {
+      const { s_id } = req.params;
+      const { p_id } = req.body;
+  
+      console.log(`Updating student ${s_id} with project ${p_id}`);
+  
+      const result = await studentsWithProjectData.findOneAndUpdate(
+        { sp_id: s_id },
+        { $set: { p_id: p_id } },
+        { new: true }
+      );
+  
+      if (result) {
+        res.status(200).send({ message: 'Student project updated successfully!', data: result });
+      } else {
+        res.status(404).send({ message: 'Student not found!' });
+      }
+    } catch (error) {
+      console.error('Error updating student project:', error);
+      res.status(500).send({ message: 'Error updating student project', error });
+    }
+  });
 
 module.exports = router

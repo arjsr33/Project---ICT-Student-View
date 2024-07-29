@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Button, FormControlLabel, Checkbox, Grid, Card, CardContent } from '@mui/material';
+import { Container, Typography, FormControlLabel, Checkbox, Grid, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
 import Navbar from './Navbar';
 import './ProjectDetails.css'; 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 function ProjectDetails() {
   const [projects, setProjects] = useState([]);
@@ -12,8 +12,12 @@ function ProjectDetails() {
   const [isAccepted, setIsAccepted] = useState(false);
 
   const { id } = useParams();
+  const navigate = useNavigate(); // Initialize navigate
+  const location = useLocation(); // Initialize useLocation to access state
+  const { studentData } = location.state || {}; // Destructure studentData from state
 
-  console.log(`Project id is ${id}`)
+  console.log(`Project id is ${id}`);
+  console.log('Student data passed as state:', studentData); // Log studentData
 
   useEffect(() => {
     axios.get(`http://localhost:5000/arjun/projects/${id}`)
@@ -22,20 +26,13 @@ function ProjectDetails() {
         setProjects(response.data);
         if (response.data.length > 0) {
           setSelectedProject(response.data[0]);
-          setSelectedProjectId(response.data[0]._id);
+          setSelectedProjectId(response.data[0].id); // Use the project ID instead of _id
         }
       })
       .catch(error => {
         console.error('Error fetching projects:', error);
       });
-  }, []);
-
-  // const handleSelectionChange = (event) => {
-  //   const projectId = event.target.value;
-  //   setSelectedProjectId(projectId);
-  //   const project = projects.find(p => p._id === projectId);
-  //   setSelectedProject(project);
-  // };
+  }, [id]);
 
   const handleAcceptanceChange = (event) => {
     setIsAccepted(event.target.checked);
@@ -46,10 +43,26 @@ function ProjectDetails() {
       const confirmed = window.confirm('Are you sure you want to select this project? Once selected, you cannot change it.');
       if (confirmed) {
         console.log('Proceeding with project:', selectedProject.name);
+        updateStudentProject(); // Call the function to update the student project
       }
     } else {
       alert('Please accept the terms to proceed.');
     }
+  };
+
+  const updateStudentProject = () => {
+    axios.put(`http://localhost:5000/princy/updateStudentProject/${studentData.s_id}`, { p_id: selectedProjectId })
+      .then(response => {
+        console.log('Student project updated:', response.data);
+        goToProjectDashboard(); // Call the function to navigate after updating the project
+      })
+      .catch(error => {
+        console.error('Error updating student project:', error);
+      });
+  };
+
+  const goToProjectDashboard = () => {
+    navigate('/ProjectDashboard1', { state: { s_id: studentData.s_id, p_id: selectedProjectId } }); // Redirect to Project Dashboard route with s_id and p_id in state
   };
 
   return (
@@ -60,24 +73,6 @@ function ProjectDetails() {
         className="dashboard-container"
         style={{ backgroundImage: `url(${selectedProject ? `/images/${selectedProject.backgroundImage}` : ''})` }}
       >
-        {/* <Box my={4} className="project-selector-box">
-          <FormControl fullWidth>
-            <InputLabel id="project-select-label">Select Project</InputLabel>
-            <Select
-              labelId="project-select-label"
-              id="project-select"
-              value={selectedProjectId}
-              label="Select Project"
-              // onChange={handleSelectionChange}
-            >
-              {projects.map((project) => (
-                <MenuItem key={project._id} value={project._id}>
-                  {project.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box> */}
         {selectedProject && (
           <Grid container spacing={2} className="project-details">
             <Grid item xs={12} md={2}>

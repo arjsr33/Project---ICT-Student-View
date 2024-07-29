@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import Home from './components/Home/Home'
-import StudentDashboard from './components/StudentDashboard'
-import WeeklySubmission from './components/WeeklySubmission'
-import ProjectDashboard1 from './components/ProjectDashboard1'
-import FinalProjectSubmission from './components/FinalProjectSubmission'
-import Login2 from './components/Login2'
-import References from './components/References'
-import VivaVoce from './components/VivaVoce'
+import './App.css'
 import DiscussionForum from './components/DiscussionForum'
+import FinalProjectSubmission from './components/FinalProjectSubmission'
+import Home from './components/Home/Home'
+import Login2 from './components/Login2'
+import ProjectDashboard1 from './components/ProjectDashboard1'
 import ProjectDetails from './components/ProjectDetails'
+import ProjectOverview from './components/ProjectOverview'
+import References from './components/References'
+import StudentDashboard from './components/StudentDashboard'
+import VivaVoce from './components/VivaVoce'
+import WeeklySubmission from './components/WeeklySubmission'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +24,7 @@ function App() {
       <Route path='/login' element={<Login2 />}></Route>
       <Route path='/StudentDashboard' element={<StudentDashboard/>}></Route>
       <Route path='/projectDetails/:id' element={<ProjectDetails />}></Route>
+      <Route path='/projectOverview/:id' element={<ProjectOverview />}></Route>
       <Route path='ProjectDashboard1' element={<ProjectDashboard1 />}></Route>
       <Route path='/references' element={<References />}></Route>
       <Route path='/WeeklySubmission' element={<WeeklySubmission />}></Route>
