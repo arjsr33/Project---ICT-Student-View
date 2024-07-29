@@ -1,14 +1,14 @@
+import React, { useEffect, useState } from 'react'
+import Navbar from './Navbar'
+import WeeklySubmission from './WeeklySubmission'
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import DiscussionForum from './DiscussionForum';
 import FinalProjectSubmission from './FinalProjectSubmission';
-import Grades from './Grades';
-import Navbar from './Navbar';
-import ProjectOverview from './ProjectOverview';
-import References from './References';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import VivaVoce from './VivaVoce';
-import WeeklySubmission from './WeeklySubmission';
+import DiscussionForum from './DiscussionForum';
+import References from './References';
+import Grades from './Grades';
+import ProjectOverview from './ProjectOverview';
 
 const ProjectDashboard1 = () => {
   const [isConditionMet, setIsConditionMet] = useState(true);
@@ -25,12 +25,6 @@ const ProjectDashboard1 = () => {
     // start_date:''
     start_date:''
 })
-// const updateBackgroundImage = (image) => {
-//   document.body.style.backgroundImage = `url(/images/${image})`;
-//   document.body.style.backgroundSize = 'cover';
-//   document.body.style.backgroundPosition = 'center';
-//   document.body.style.backgroundRepeat = 'no-repeat';
-// };
 
   useEffect(()=>{
     axios.get(`http://localhost:5000/princy/studentswithprojects/${s_id}`)
@@ -45,7 +39,6 @@ const ProjectDashboard1 = () => {
           start_date:new Date(res.data[0].start_date).toLocaleDateString(),
           // start_date:res.data[0].start_date,
       })
-        // updateBackgroundImage(res.data[0].backgroundImage);
         console.log('Student data is - ')
         console.log(student)
     })
@@ -115,7 +108,7 @@ const ProjectDashboard1 = () => {
 
           <div class="col-9 ms-5">
             <div class="tab-content" id="v-pills-tabContent">
-              <div class="tab-pane fade show active" id="v-pills-pjtDoc" role="tabpanel" aria-labelledby="v-pills-pjtDoc-tab" tabindex="0"><br/><br/><ProjectOverview p_id={student.p_id}/></div>
+              <div class="tab-pane fade show active" id="v-pills-pjtDoc" role="tabpanel" aria-labelledby="v-pills-pjtDoc-tab" tabindex="0"><br/><br/><ProjectOverview p_id={student.p_id}/></div>          
               <div class="tab-pane fade" id="v-pills-reference" role="tabpanel" aria-labelledby="v-pills-reference-tab" tabindex="0"><br/><br/><References p_id={student.p_id}/></div>
               <div class="tab-pane fade" id="v-pills-weekly" role="tabpanel" aria-labelledby="v-pills-weekly-tab" tabindex="0"><WeeklySubmission s_id={s_id}/></div>
               <div class="tab-pane fade" id="v-pills-discussion" role="tabpanel" aria-labelledby="v-pills-discussion-tab" tabindex="0"><br/><br/><DiscussionForum/></div>

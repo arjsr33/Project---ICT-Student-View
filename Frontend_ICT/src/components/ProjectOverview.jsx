@@ -30,16 +30,16 @@ function ProjectOverview({p_id}) {
 
   useEffect(() => {
     if (selectedProject) {
-      updateBackgroundImage(selectedProject.backgroundImage);
+      // updateBackgroundImage(selectedProject.backgroundImage);
     }
   }, [selectedProject]);
 
-  const updateBackgroundImage = (image) => {
-    document.body.style.backgroundImage = `url(/images/${image})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundRepeat = 'no-repeat';
-  };
+  // const updateBackgroundImage = (image) => {
+  //   document.body.style.backgroundImage = `url(/images/${image})`;
+  //   document.body.style.backgroundSize = 'cover';
+  //   document.body.style.backgroundPosition = 'center';
+  //   document.body.style.backgroundRepeat = 'no-repeat';
+  // };
 
   return (
     <Container maxWidth="lg" style={{ padding: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
