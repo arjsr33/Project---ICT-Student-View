@@ -27,7 +27,7 @@ const References = ({p_id}) => {
         onChange={(e) => setProjectId(e.target.value)}
         placeholder="Enter Project ID"
       />
-      <button onClick={fetchProject}>Get Project</button>
+      <button onClick={fetchProject}>Get Reference</button>
       {error && <p className="error">{error}</p>}
       {project && (
         <div className="project-details">

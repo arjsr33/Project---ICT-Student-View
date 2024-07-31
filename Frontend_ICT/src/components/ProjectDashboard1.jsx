@@ -65,7 +65,7 @@ const ProjectDashboard1 = () => {
       <h2 className="text-primary py-2 text-center"><b><u>PROJECT DASHBOARD</u></b></h2>
       <h4 className="py-2 text-center">
         <u>
-          <i>Hi</i> <b>{student.sp_name},{student.p_id}</b>,  
+          <i>Hi</i> <b>{student.sp_name}</b>,  
           <i>You have started on : </i><b>{new Date(student.start_date).toLocaleDateString()}</b>
         </u>
       </h4>
@@ -115,7 +115,7 @@ const ProjectDashboard1 = () => {
               <div className="tab-pane fade show active" id="v-pills-pjtDoc" role="tabpanel" aria-labelledby="v-pills-pjtDoc-tab" tabIndex="0"><br /><br /><ProjectOverview p_id={student.p_id} /></div>
               <div className="tab-pane fade" id="v-pills-reference" role="tabpanel" aria-labelledby="v-pills-reference-tab" tabIndex="0"><br /><br /><References p_id={student.p_id} /></div>
               <div className="tab-pane fade" id="v-pills-weekly" role="tabpanel" aria-labelledby="v-pills-weekly-tab" tabIndex="0"><WeeklySubmission s_id={s_id} /></div>
-              <div className="tab-pane fade" id="v-pills-discussion" role="tabpanel" aria-labelledby="v-pills-discussion-tab" tabIndex="0"><br /><br /><DiscussionForum batch={student.batch} /></div>
+              <div className="tab-pane fade" id="v-pills-discussion" role="tabpanel" aria-labelledby="v-pills-discussion-tab" tabIndex="0"><br /><br /><DiscussionForum s_id={s_id} /></div>
               <div className="tab-pane fade" id="v-pills-grades" role="tabpanel" aria-labelledby="v-pills-grades-tab" tabIndex="0"><br /><br /><Grades /></div>
               <div className="tab-pane fade" id="v-pills-final" role="tabpanel" aria-labelledby="v-pills-final-tab" tabIndex="0"><FinalProjectSubmission s_id={s_id} /></div>
               <div className="tab-pane fade" id="v-pills-viva" role="tabpanel" aria-labelledby="v-pills-viva-tab" tabIndex="0"><br /><br /><VivaVoce /></div>

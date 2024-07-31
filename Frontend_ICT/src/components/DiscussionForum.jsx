@@ -1,45 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const DiscussionForum = () => {
-  const [queries, setQueries] = useState([
-    { id: 1, text: 'What is React?', comments: ['React is a JavaScript library for building user interfaces.'], views: 120, date: '2 days ago', isFavorite: false, user: { name: 'John Doe', online: true } },
-    { id: 2, text: 'How to use useState hook?', comments: ['useState is a Hook that lets you add React state to function components.'], views: 85, date: '5 days ago', isFavorite: false, user: { name: 'Jane Smith', online: false } },
-  ]);
+const DiscussionForum = ({ s_id }) => {
+  const [queries, setQueries] = useState([]);
   const [newQuery, setNewQuery] = useState('');
   const [editingQueryId, setEditingQueryId] = useState(null);
-  const [marks, setMarks] = useState(85); // Example marks
-  const [comments, setComments] = useState('Good work!');
+  const [newComment, setNewComment] = useState('');
   const [hoveredQuery, setHoveredQuery] = useState(null);
 
-  const handlePostQuery = () => {
+  useEffect(() => {
+    fetchDiscussion();
+  }, [s_id]);
+
+  const fetchDiscussion = async () => {
+    try {
+      console.log(`Fetching discussion for student ID: ${s_id}`);
+      const response = await axios.get(`http://localhost:5000/discussion/discussion/${s_id}`);
+      const discussion = response.data.questions.map(question => ({
+        id: question._id,
+        text: question.question,
+        comments: question.answers,
+        views: Math.floor(Math.random() * 1000), // Randomizing views for demonstration
+        date: 'Just now', // Placeholder, replace with actual data if available
+        isFavorite: false,
+        user: { name: 'User', online: true } // Placeholder, replace with actual data if available
+      }));
+      setQueries(discussion);
+    } catch (error) {
+      console.error('Error fetching discussion:', error);
+    }
+  };
+
+  const handlePostQuery = async () => {
     if (newQuery.trim()) {
-      setQueries([...queries, { id: Date.now(), text: newQuery, comments: [], views: 0, date: 'Just now', isFavorite: false, user: { name: 'New User', online: true } }]);
-      setNewQuery('');
+      try {
+        const response = await axios.post(`http://localhost:5000/discussion/discussion/${s_id}/question`, { question: newQuery });
+        setQueries([...queries, {
+          id: response.data.questions[response.data.questions.length - 1]._id,
+          text: newQuery,
+          comments: [],
+          views: Math.floor(Math.random() * 1000),
+          date: 'Just now',
+          isFavorite: false,
+          user: { name: 'User', online: true }
+        }]);
+        setNewQuery('');
+      } catch (error) {
+        console.error('Error posting query:', error);
+      }
     }
   };
 
-  const handleEditQuery = (id) => {
-    const query = queries.find(q => q.id === id);
-    if (query) {
-      setNewQuery(query.text);
-      setEditingQueryId(id);
+  const handleAddComment = async (queryId, comment) => {
+    if (comment.trim()) {
+      try {
+        await axios.post(`http://localhost:5000/discussion/discussion/${s_id}/question/${queryId}/answer`, { answer: comment });
+        setQueries(queries.map(q => 
+          q.id === queryId ? { ...q, comments: [...q.comments, comment] } : q
+        ));
+        setNewComment('');
+      } catch (error) {
+        console.error('Error adding comment:', error);
+      }
     }
   };
 
-  const handleUpdateQuery = () => {
-    setQueries(queries.map(q => q.id === editingQueryId ? { ...q, text: newQuery } : q));
-    setNewQuery('');
-    setEditingQueryId(null);
+  const handleEditQuery = async () => {
+    if (newQuery.trim() && editingQueryId) {
+      try {
+        const response = await axios.put(`http://localhost:5000/discussion/discussion/${s_id}/question/${editingQueryId}`, { questionText: newQuery });
+        setQueries(queries.map(q => q.id === editingQueryId ? { ...q, text: newQuery } : q));
+        setNewQuery('');
+        setEditingQueryId(null);
+      } catch (error) {
+        console.error('Error editing query:', error);
+      }
+    }
   };
 
-  const handleDeleteQuery = (id) => {
-    setQueries(queries.filter(q => q.id !== id));
-  };
-
-  const handleAddComment = (queryId, comment) => {
-    setQueries(queries.map(q => 
-      q.id === queryId ? { ...q, comments: [...q.comments, comment] } : q
-    ));
+  const handleDeleteQuery = async (queryId) => {
+    try {
+      await axios.delete(`http://localhost:5000/discussion/discussion/${s_id}/question/${queryId}`);
+      setQueries(queries.filter(q => q.id !== queryId));
+    } catch (error) {
+      console.error('Error deleting query:', error);
+    }
   };
 
   const toggleFavorite = (id) => {
@@ -57,7 +102,7 @@ const DiscussionForum = () => {
           placeholder="Post a new query or edit an existing one..."
         />
         {editingQueryId ? (
-          <button onClick={handleUpdateQuery} style={styles.button}>Update Query</button>
+          <button onClick={handleEditQuery} style={styles.button}>Update Query</button>
         ) : (
           <button onClick={handlePostQuery} style={styles.button}>Post Query</button>
         )}
@@ -87,7 +132,7 @@ const DiscussionForum = () => {
             </div>
             {hoveredQuery === query.id && (
               <div style={styles.queryEditActions}>
-                <button onClick={() => handleEditQuery(query.id)} style={styles.editButton}>Edit</button>
+                <button onClick={() => setEditingQueryId(query.id)} style={styles.editButton}>Edit</button>
                 <button onClick={() => handleDeleteQuery(query.id)} style={styles.deleteButton}>Delete</button>
               </div>
             )}
@@ -105,10 +150,11 @@ const DiscussionForum = () => {
                 type="text" 
                 style={styles.commentInput}
                 placeholder="Add a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && e.target.value.trim()) {
-                    handleAddComment(query.id, e.target.value.trim());
-                    e.target.value = '';
+                  if (e.key === 'Enter' && newComment.trim()) {
+                    handleAddComment(query.id, newComment.trim());
                   }
                 }}
               />
@@ -116,7 +162,6 @@ const DiscussionForum = () => {
           </div>
         ))}
       </div>
-     
     </div>
   );
 };
@@ -240,9 +285,6 @@ const styles = {
     padding: '5px',
     borderRadius: '5px',
     border: '1px solid #ccc',
-  },
-  marksSection: {
-    marginTop: '20px',
   },
 };
 
