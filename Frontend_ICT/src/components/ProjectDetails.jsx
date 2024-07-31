@@ -40,12 +40,12 @@ function ProjectDetails() {
 
   const handleSelectAndProceed = () => {
     if (isAccepted) {
-      const confirmed = window.confirm('Are you sure you want to select this project? Once selected, you cannot change it.');
-      if (confirmed) {
+      // const confirmed = window.confirm('Are you sure you want to select this project? Once selected, you cannot change it.');
+      // if (confirmed) {
         console.log('Proceeding with project:', selectedProject.name);
         saveProjectSelection();
       }
-    } else {
+     else {
       alert('Please accept the terms to proceed.');
     }
   };

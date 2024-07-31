@@ -135,6 +135,7 @@ const Signup = () => {
   return (
     <div>
         <Navbar/>
+        <br/><br/>
     <div className="signup-container">
       <style jsx="true">{`
         .signup-container {

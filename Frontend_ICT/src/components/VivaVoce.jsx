@@ -45,7 +45,7 @@ const VivaVoce = () => {
 
   const handleProjectReportSubmit = () => {
     setProjectReportSubmitted(true);
-    alert('Project report submitted successfully!');
+    // alert('Project report submitted successfully!');
   };
 
   const toggleModal = () => {

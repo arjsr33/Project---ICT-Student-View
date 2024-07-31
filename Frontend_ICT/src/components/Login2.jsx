@@ -38,7 +38,8 @@ const Login2 = () => {
   return(
     <div>
     <Navbar/>
-    <div className="login-container">
+    <br/><br/><br/>
+      <div className="login-container">
       <style jsx="true">{`
         .login-container {
           display: flex;

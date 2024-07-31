@@ -112,7 +112,7 @@ const ProjectDashboard1 = () => {
           </div>
           <div className="col-9 ms-5">
             <div className="tab-content" id="v-pills-tabContent">
-              <div className="tab-pane fade show active" id="v-pills-pjtDoc" role="tabpanel" aria-labelledby="v-pills-pjtDoc-tab" tabIndex="0"><br /><br /><ProjectOverview p_id={student.p_id} /></div>
+              <div className="tab-pane fade show active" id="v-pills-pjtDoc" role="tabpanel" aria-labelledby="v-pills-pjtDoc-tab" tabIndex="0"><ProjectOverview p_id={student.p_id} /></div>
               <div className="tab-pane fade" id="v-pills-reference" role="tabpanel" aria-labelledby="v-pills-reference-tab" tabIndex="0"><br /><br /><References p_id={student.p_id} /></div>
               <div className="tab-pane fade" id="v-pills-weekly" role="tabpanel" aria-labelledby="v-pills-weekly-tab" tabIndex="0"><WeeklySubmission s_id={s_id} /></div>
               <div className="tab-pane fade" id="v-pills-discussion" role="tabpanel" aria-labelledby="v-pills-discussion-tab" tabIndex="0"><br /><br /><DiscussionForum s_id={s_id} /></div>
