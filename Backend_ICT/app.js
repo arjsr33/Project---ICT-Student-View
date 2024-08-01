@@ -21,11 +21,11 @@ const discussionRoutes = require('./routes/discussion'); // Import discussion ro
 
 
 
-app.use('/princy',princyRoutes)
-app.use('/salman',salmanRoutes2)
-app.use('/fathima',fathimaRoutes)
-app.use('/arjun',arjunRoutes)
-app.use('/discussion', discussionRoutes)
+app.use('/api/princy',princyRoutes)
+app.use('/api/salman',salmanRoutes2)
+app.use('/api/fathima',fathimaRoutes)
+app.use('/api/arjun',arjunRoutes)
+app.use('/api/discussion', discussionRoutes)
 
 
 

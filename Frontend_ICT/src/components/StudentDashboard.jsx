@@ -25,7 +25,7 @@ const StudentDashboard = () => {
     })
     const [projects,setProjects]=useState([])
     useEffect(()=>{
-        axios.get(`http://localhost:5000/princy/studentCourse/${s_id}`)
+        axios.get(`http://localhost:5000/api/princy/studentCourse/${s_id}`)
         .then((res)=>{
             console.log(`Axios res.data(student) is - `)
             console.log(res.data)
@@ -35,7 +35,7 @@ const StudentDashboard = () => {
         })
     },[])
     useEffect(()=>{
-        axios.get(`http://localhost:5000/princy/availableProjects/${studentData.s_course}`)
+        axios.get(`http://localhost:5000/api/princy/availableProjects/${studentData.s_course}`)
         .then((res)=>{
             console.log(`Axios res.data(projects) is - `)
             console.log(res.data)
@@ -44,7 +44,7 @@ const StudentDashboard = () => {
     },[studentData.s_course])
 
     function postStdPjt(){
-        axios.post(`http://localhost:5000/princy/postStdPjt`,
+        axios.post(`http://localhost:5000/api/princy/postStdPjt`,
             {sp_id:"S0011",
             sp_name:"Shamna",
             p_id:"P004",
