@@ -80,7 +80,7 @@ const Signup = () => {
       //   alert('Sorry no such student in ICT!!')
       //   navigate('/login');
       // }else{
-        const result = await axios.post('http://localhost:5000/salman/signup', { name, email, password, phone, batch });
+        const result = await axios.post('http://localhost:5000/api/salman/signup', { name, email, password, phone, batch });
         console.log(result);
         setSuccess('Signup successful! Redirecting to login...');
         setError('');

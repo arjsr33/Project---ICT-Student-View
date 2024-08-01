@@ -13,7 +13,7 @@ const Login2 = () => {
     e.preventDefault();
     // navigate('/StudentDashboard ',{ state: { s_id: 'S0001' } });
     try {
-      const response = await axios.post('http://localhost:5000/salman/login', { email, password });
+      const response = await axios.post('http://localhost:5000/api/salman/login', { email, password });
       const { data } = response;
 
       if (data.message === "Login successful") {
