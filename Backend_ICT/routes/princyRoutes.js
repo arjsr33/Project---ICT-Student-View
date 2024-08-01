@@ -16,14 +16,7 @@ const weeklySubmissionData = require('../model/weeklySubmissionData')
 const projectSubmissionData = require('../model/projectSubmissionData')
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
-    }
-  })
+const storage = multer.memoryStorage();
   
 const upload = multer({ storage: storage })
 
